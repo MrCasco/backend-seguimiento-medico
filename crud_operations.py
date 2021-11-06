@@ -10,7 +10,7 @@ def validateFields(data):
 
 class Prescription:
     def getPrescription(id):
-        doc = db.collection('pacientes').document(id).get()
+        doc = db.collection('recetas').document(id).get()
         if doc.exists:
             return doc.to_dict()
         return False
@@ -42,7 +42,7 @@ class Prescription:
         except Exception as e:
             print(e)
             return 'Error en borrar receta'
-        return 'Recata borrada correctamente'
+        return 'Receta borrada correctamente'
 
 class Patient:
     def updatePatient(mail, data):
