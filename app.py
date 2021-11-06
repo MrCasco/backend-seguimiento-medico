@@ -3,6 +3,10 @@ from login import login_logic
 from crud_operations import Patient, Medic, Prescription
 app = Flask(__name__)
 
+@app.route('/medics-patients/')
+def medics_patients():
+    return Medic.getPatients(request.args['correo'])
+
 
 @app.route('/medic/', methods = ['POST', 'GET', 'DELETE'])
 def medic():
@@ -22,7 +26,7 @@ def medic():
             return 'No existe el medico'
         return medic
     elif request.method == 'DELETE':
-        mail = request.form['correo']
+        mail = request.args['correo']
         return Medic.deleteMedic(mail)
 
 

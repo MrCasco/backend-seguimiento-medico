@@ -24,6 +24,7 @@ class Prescription:
                     response = validateFields(data)
                     if not response:
                         db.collection('recetas').document().set(data)
+                        db.collection('medicos').document(medic).collection('pacientes').document(patient).set(data)
                         return []
                     else:
                         return response
@@ -72,8 +73,9 @@ class Patient:
         return 'Baja de paciente correcta'
 
 class Medic:
-    def getPatients():
-        pass
+    def getPatients(mail):
+        docs = db.collection('medicos').document(mail).collection('pacientes').stream()
+        return ', '.join([doc.id for doc in docs])
 
     def getMedic(mail):
         doc = db.collection('medicos').document(mail).get()
