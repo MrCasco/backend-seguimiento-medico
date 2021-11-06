@@ -29,7 +29,7 @@ def patient():
         medic = Patient.getPatient(mail)
         if medic:
             return 'Paciente ya registrado'
-        elif Patient.insertPaciente(dict(request.form)):
+        elif Patient.insertPatient(dict(request.form)):
             return 'Paciente guardado correctamente'
         return 'Hubo un problema'
     elif request.method == 'GET':
