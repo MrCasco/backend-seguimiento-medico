@@ -45,6 +45,13 @@ class Prescription:
         return 'Recata borrada correctamente'
 
 class Patient:
+    def getPrescriptions(mail):
+        docs = db.collection('recetas').where('paciente', '==', mail).stream()
+        pres = []
+        for doc in docs:
+            pres.append(doc.to_dict())
+        return str(pres)
+
     def getPatient(mail):
         doc = db.collection('pacientes').document(mail).get()
         if doc.exists:
