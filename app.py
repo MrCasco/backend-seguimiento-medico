@@ -53,7 +53,7 @@ def patient():
             return 'No existe el paciente'
         return medic
     elif request.method == 'DELETE':
-        mail = request.form['correo']
+        mail = request.args['correo']
         return Patient.deletePatient(mail)
 
 
@@ -71,7 +71,7 @@ def prescriptions():
             return 'No existe la receta'
         return pres
     elif request.method == 'DELETE':
-        id = request.form['id']
+        id = request.args['id']
         return Prescription.deletePrescription(id)
 
 
