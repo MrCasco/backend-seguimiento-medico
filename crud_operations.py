@@ -7,9 +7,38 @@ def validateFields(data, base):
     for llave, valor in data.items():
         if llave not in base:
             missingvalues.append(llave)
+    return missingvalues
 
-    return missingvalues            
-    
+
+class Prescription:
+    def getPrescription(id):
+        doc = db.collection('pacientes').document(id).get()
+        if doc.exists:
+            return doc.to_dict()
+        return False
+
+    def insertPrescription(data):
+        try:
+            patient = data['paciente']
+            medic = data['medico']
+            if Medic.getMedic(medic):
+                if Patient.getPatient(patient):
+                    db.collection('recetas').document().set(data)
+                else:
+                    return 'Paciente no valido'
+            else:
+                return 'Medico no valido'
+        except Exception as e:
+            print(e)
+            return False
+        return True
+
+    def deletePrescription(id):
+        try:
+            db.collection('recetas').document(id).delete()
+        except Exception as e:
+            return e
+        return 'Baja de paciente correcta'
 
 class Patient:
     def getPatient(mail):
@@ -37,6 +66,9 @@ class Patient:
         return 'Baja de paciente correcta'
 
 class Medic:
+    def getPatients():
+        pass
+
     def getMedic(mail):
         doc = db.collection('medicos').document(mail).get()
         if doc.exists:
