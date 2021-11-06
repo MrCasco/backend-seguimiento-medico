@@ -1,5 +1,18 @@
 from database import db
 
+class Prescription:
+    def getPrescription(mail):
+        pass
+
+    def insertPrescription(data):
+        try:
+            pass
+        except Exception as e:
+            raise
+
+    def deletePrescription(mail):
+        pass
+
 class Patient:
     def getPatient(mail):
         doc = db.collection('pacientes').document(mail).get()
