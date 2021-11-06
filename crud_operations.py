@@ -1,11 +1,9 @@
 from database import db
-medicfields = set(["nombre", "especialidad", "idcedula", "edad", "numerocontacto"])
-patientfields = set(["nombre", "correo", "numeroseguro", "poliza"])
 
-def validateFields(data, base):
-    missingvalues=[]
+def validateFields(data):
+    missingvalues = []
     for llave, valor in data.items():
-        if llave not in base:
+        if valor == '':
             missingvalues.append(llave)
     return missingvalues
 
@@ -23,22 +21,27 @@ class Prescription:
             medic = data['medico']
             if Medic.getMedic(medic):
                 if Patient.getPatient(patient):
-                    db.collection('recetas').document().set(data)
+                    response = validateFields(data)
+                    if not response:
+                        db.collection('recetas').document().set(data)
+                        return []
+                    else:
+                        return response
                 else:
-                    return 'Paciente no valido'
+                    return ['Paciente no existe']
             else:
-                return 'Medico no valido'
+                return ['Medico no existe']
         except Exception as e:
             print(e)
-            return False
-        return True
+            return [e]
 
     def deletePrescription(id):
         try:
             db.collection('recetas').document(id).delete()
         except Exception as e:
-            return e
-        return 'Baja de paciente correcta'
+            print(e)
+            return 'Error en borrar receta'
+        return 'Recata borrada correctamente'
 
 class Patient:
     def getPatient(mail):
@@ -49,14 +52,17 @@ class Patient:
 
     def insertPatient(data):
         try:
-            validateFields(data, patientfields)
-            mail = data['correo']
-            data.pop('correo')
-            db.collection('pacientes').document(mail).set(data)
+            response = validateFields(data)
+            if not response:
+                mail = data['correo']
+                data.pop('correo')
+                db.collection('pacientes').document(mail).set(data)
+                return []
+            else:
+                return response
         except Exception as e:
             print(e)
-            return False
-        return True
+            return [e]
 
     def deletePatient(mail):
         try:
@@ -77,14 +83,17 @@ class Medic:
 
     def insertMedic(data):
         try:
-            validateFields(data, medicfields)
-            mail = data['correo']
-            data.pop('correo')
-            db.collection('medicos').document(mail).set(data)
+            response = validateFields(data)
+            if not response:
+                mail = data['correo']
+                data.pop('correo')
+                db.collection('medicos').document(mail).set(data)
+                return []
+            else:
+                return response
         except Exception as e:
             print(e)
-            return False
-        return True
+            return [e]
 
     def deleteMedic(mail):
         try:

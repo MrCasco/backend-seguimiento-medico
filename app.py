@@ -11,9 +11,11 @@ def medic():
         medic = Medic.getMedic(mail)
         if medic:
             return 'Medico ya registrado'
-        elif Medic.insertMedic(dict(request.form)):
+        response = Medic.insertMedic(dict(request.form))
+        if not response:
             return 'Medico guardado correctamente'
-        return 'Hubo un problema'
+        print(response)
+        return 'Falta: '+', '.join(response)
     elif request.method == 'GET':
         medic = Medic.getMedic(request.args.get('correo'))
         if not medic:
@@ -31,9 +33,11 @@ def patient():
         medic = Patient.getPatient(mail)
         if medic:
             return 'Paciente ya registrado'
-        elif Patient.insertPatient(dict(request.form)):
+        response = Patient.insertPatient(dict(request.form))
+        if not response:
             return 'Paciente guardado correctamente'
-        return 'Hubo un problema'
+        print(response)
+        return 'Falta:'+', '.join(response)
     elif request.method == 'GET':
         medic = Patient.getPatient(request.args.get('correo'))
         if not medic:
@@ -48,9 +52,10 @@ def patient():
 def prescriptions():
     if request.method == 'POST':
         response = Prescription.insertPrescription(dict(request.form))
-        if response not in ('Paciente no valido', 'Medico no valido') or response == False:
+        if not response:
             return 'Receta creada correctamente'
-        return 'Error con receta'
+        print(response)
+        return 'Falta:'+', '.join(response)
     elif request.method == 'GET':
         pres = Prescription.getPrescription(request.args.get('id'))
         if not pres:
