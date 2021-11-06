@@ -45,6 +45,16 @@ class Prescription:
         return 'Recata borrada correctamente'
 
 class Patient:
+    def updatePatient(mail, data):
+        print(mail, data)
+        try:
+            db.collection('pacientes').document(mail).update(data)
+            return 'Paciente actualizado correctamente'
+        except Exception as e:
+            print(e)
+            return str(e)
+
+
     def getPrescriptions(mail):
         docs = db.collection('recetas').where('paciente', '==', mail).stream()
         pres = []

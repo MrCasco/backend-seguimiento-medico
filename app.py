@@ -3,14 +3,25 @@ from login import login_logic
 from crud_operations import Patient, Medic, Prescription
 app = Flask(__name__)
 
-@app.route('/patients-of-medic/')
+@app.route('/patients-of-medic/', methods = ['GET'])
 def medics_patients():
     return Medic.getPatients(request.args['correo'])
 
 
-@app.route('/prescriptions-of-patient/')
+@app.route('/prescriptions-of-patient/', methods = ['GET'])
 def prescriptions_of_patient():
     return Patient.getPrescriptions(request.args['correo'])
+
+
+@app.route('/update-patient/', methods = ['POST'])
+def update_patient():
+    to_update = {}
+    mail = request.form['correo']
+    if 'numeroSeguroSocial' in request.form:
+        to_update['numeroSeguroSocial'] = request.form['numeroSeguroSocial']
+    if 'polizaSeguroSocial' in request.form:
+        to_update['polizaSeguroSocial'] = request.form['polizaSeguroSocial']
+    return Patient.updatePatient(mail, to_update)
 
 
 @app.route('/medic/', methods = ['POST', 'GET', 'DELETE'])
