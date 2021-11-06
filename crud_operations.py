@@ -1,4 +1,15 @@
 from database import db
+medicfields = set(["nombre", "especialidad", "idcedula", "edad", "numerocontacto"])
+patientfields = set(["nombre", "correo", "numeroseguro", "poliza"])
+
+def validateFields(data, base):
+    missingvalues=[]
+    for llave, valor in data.items():
+        if llave not in base:
+            missingvalues.append(llave)
+
+    return missingvalues            
+    
 
 class Patient:
     def getPatient(mail):
@@ -9,6 +20,7 @@ class Patient:
 
     def insertPatient(data):
         try:
+            validateFields(data, patientfields)
             mail = data['correo']
             data.pop('correo')
             db.collection('pacientes').document(mail).set(data)
@@ -33,6 +45,7 @@ class Medic:
 
     def insertMedic(data):
         try:
+            validateFields(data, medicfields)
             mail = data['correo']
             data.pop('correo')
             db.collection('medicos').document(mail).set(data)
