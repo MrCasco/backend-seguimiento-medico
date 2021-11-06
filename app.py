@@ -3,9 +3,14 @@ from login import login_logic
 from crud_operations import Patient, Medic, Prescription
 app = Flask(__name__)
 
-@app.route('/medics-patients/')
+@app.route('/patients-of-medic/')
 def medics_patients():
     return Medic.getPatients(request.args['correo'])
+
+
+@app.route('/prescriptions-of-patient/')
+def prescriptions_of_patient():
+    return Patient.getPrescriptions(request.args['correo'])
 
 
 @app.route('/medic/', methods = ['POST', 'GET', 'DELETE'])
@@ -48,7 +53,7 @@ def patient():
             return 'No existe el paciente'
         return medic
     elif request.method == 'DELETE':
-        mail = request.form['correo']
+        mail = request.args['correo']
         return Patient.deletePatient(mail)
 
 
@@ -66,7 +71,7 @@ def prescriptions():
             return 'No existe la receta'
         return pres
     elif request.method == 'DELETE':
-        id = request.form['id']
+        id = request.args['id']
         return Prescription.deletePrescription(id)
 
 
